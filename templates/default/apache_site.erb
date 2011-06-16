@@ -1,0 +1,10 @@
+ProxyRequests Off
+ProxyPreserveHost On
+<VirtualHost *:80>
+  ServerName <%= node['sonar']['web_domain'] %>
+  ServerAdmin admin@<%= node['sonar']['web_domain'] %>
+  ProxyPass / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
+  ProxyPassReverse / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
+  ErrorLog logs/<%= node['sonar']['web_domain'] %>/sonar/error.log
+  CustomLog logs/<%= node['sonar']['web_domain'] %>/sonar/access.log common
+</VirtualHost>

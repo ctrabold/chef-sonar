@@ -1,0 +1,18 @@
+# the server directive is nginx's virtual host directive
+server {
+  # port to listen on. Can also be set to an IP:PORT
+  listen 80;
+
+  # sets the domain[s] that this vhost server requests for
+  server_name <%= node['sonar']['web_domain'] %>;
+
+  location / {
+    proxy_pass http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+  }
+
+  error_log         <%= node['nginx']['log_dir'] %>/sonar-error.log;
+  access_log        <%= node['nginx']['log_dir'] %>/sonar-access.log;
+}
