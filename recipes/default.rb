@@ -41,7 +41,7 @@ service "sonar" do
   start_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
   status_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh status"
   restart_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh restart"
-  action :nothing
+  action :start
 end
 
 template "sonar.properties" do
