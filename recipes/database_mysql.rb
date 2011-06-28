@@ -10,6 +10,7 @@ template "/opt/sonar/extras/database/mysql/create_database.sql" do
   group "root"
   mode "0600"
   action :create
+  notifies :restart, resources(:service => "sonar")
 end
 
 execute "mysql-install-application-privileges" do
