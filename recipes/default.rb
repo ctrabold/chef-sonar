@@ -53,3 +53,12 @@ template "sonar.properties" do
   mode 0644
   notifies :restart, resources(:service => "sonar")
 end
+
+template "wrapper.conf" do
+  path "/opt/sonar/conf/wrapper.conf"
+  source "wrapper.conf.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  notifies :restart, resources(:service => "sonar")
+end

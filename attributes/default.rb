@@ -19,3 +19,12 @@ default['sonar']['jdbc_password']        = "sonar"
 default['sonar']['jdbc_url']             = "jdbc:derby://localhost:1527/sonar;create=true"
 default['sonar']['jdbc_driverClassName'] = "org.apache.derby.jdbc.ClientDriver"
 default['sonar']['jdbc_validationQuery'] = "values(1)"
+
+# Wrapper settings eg. for performance improvements
+# @see http://docs.codehaus.org/display/SONAR/Performances
+default['sonar']['java_additional']        = "-server"
+default['sonar']['java_initmemory']        = "256"
+default['sonar']['java_maxmemory']         = "512"
+default['sonar']['java_command']           = "java"
+default['sonar']['logfile_maxsize']        = "0"
+default['sonar']['syslog_loglevel']        = "NONE"
