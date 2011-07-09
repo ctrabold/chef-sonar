@@ -14,6 +14,7 @@ default['sonar']['web_domain']  = "sonar.example.com"
 default['sonar']['web_context'] = "/"
 
 # Database settings
+# @see conf/sonar.properties for examples for different databases
 default['sonar']['jdbc_username']        = "sonar"
 default['sonar']['jdbc_password']        = "sonar"
 default['sonar']['jdbc_url']             = "jdbc:derby://localhost:1527/sonar;create=true"
