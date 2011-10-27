@@ -15,12 +15,3 @@ end
 execute "mysql-install-application-privileges" do
   command "/usr/bin/mysql -u root #{node[:mysql][:server_root_password].empty? ? '' : '-p' }#{node[:mysql][:server_root_password]} < #{grants_path}"
 end
-
-# Create database with mysql LWRP
-#mysql_database "sonar" do
-#  host "localhost"
-#  username "root"
-#  password node[:mysql][:server_root_password]
-#  database "sonar"
-#  action :create_db
-#end
