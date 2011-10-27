@@ -17,7 +17,21 @@ end
   depends cb
 end
 
+attribute "sonar/dir",
+  :display_name => "Sonar directory",
+  :description => "Path to sonar",
+  :default => "/opt/sonar"
+
 attribute "sonar/version",
   :display_name => "Sonar version",
   :description => "The version will be used to download the sources for the given version from 'http://dist.sonar.codehaus.org/sonar-#version#.zip'",
-  :default => "2.7"
+  :default => "2.11"
+
+attribute "sonar/checksum",
+  :display_name => "MD5 Checksum",
+  :description => "MD5 Checksum of download file"
+
+attribute "sonar/os_kernel",
+  :display_name => "System architecture",
+  :description => "Choose which CPU your running sonar on. This modifies the start-script to your architecture.",
+  :default => "linux-x86-32"
