@@ -3,8 +3,7 @@ include_recipe "mysql::server"
 # Setup sonar user
 grants_path = "/opt/sonar/extras/database/mysql/create_database.sql"
 
-template "/opt/sonar/extras/database/mysql/create_database.sql" do
-  path grants_path
+template grants_path do
   source "create_mysql_database.sql.erb"
   owner "root"
   group "root"
