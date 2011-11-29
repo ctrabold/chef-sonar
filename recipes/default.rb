@@ -23,7 +23,7 @@ include_recipe "maven"
 package "unzip"
 
 remote_file "/opt/sonar-#{node['sonar']['version']}.zip" do
-  source "http://dist.sonar.codehaus.org/sonar-#{node['sonar']['version']}.zip"
+  source "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
   mode "0644"
   checksum "#{node['sonar']['checksum']}"
   not_if {File.exists?("/opt/sonar-#{node['sonar']['version']}.zip")}
