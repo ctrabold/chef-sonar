@@ -13,7 +13,7 @@ recipe           "sonar::proxy_nginx", "Includes the recipe to install Nginx-Web
   supports os
 end
 
-%w{ java }.each do |cb|
+%w{ java maven }.each do |cb|
   depends cb
 end
 
