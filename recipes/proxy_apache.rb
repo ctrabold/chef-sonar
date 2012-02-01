@@ -39,7 +39,7 @@ Apache configuration is going to vary based on your own application's requiremen
 include_recipe "apache2"
 
 template "sonar_server.conf" do
-  path "#{node[:nginx][:dir]}/sites-enabled/"
+  path "#{node[:apache][:dir]}/sites-enabled/"
   source "apache_site.erb"
   owner "root"
   group "root"
@@ -48,7 +48,7 @@ end
 
 if node['sonar']['enable_mod_proxy_ajp'] == true
   include_recipe "apache2::mod_proxy_ajp"
-else 
+else
   include_recipe "apache2::mod_proxy"
 end
 
