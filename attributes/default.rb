@@ -1,7 +1,7 @@
 # General settings
 default['sonar']['dir']       = "/opt"
-default['sonar']['version']   = "2.11"
-default['sonar']['checksum']  = "9d05e25ca79c33d673004444d89c8770"
+default['sonar']['version']   = "2.13.1"
+default['sonar']['checksum']  = "37e0502e07e197b8e3a382c64fac8e1d"
 default['sonar']['os_kernel'] = "linux-x86-32"
 default['sonar']['mirror']    = "http://dist.sonar.codehaus.org"
 
