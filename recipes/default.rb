@@ -21,31 +21,31 @@ include_recipe "java"
 
 package "unzip"
 
-remote_file "/opt/sonar-#{node['sonar']['version']}.zip" do
+remote_file "#{node['sonar']['dir']}/sonar-#{node['sonar']['version']}.zip" do
   source "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
   mode "0644"
   checksum "#{node['sonar']['checksum']}"
-  not_if {File.exists?("/opt/sonar-#{node['sonar']['version']}.zip")}
+  not_if {File.exists?("#{node['sonar']['dir']}/sonar-#{node['sonar']['version']}.zip")}
 end
 
-execute "unzip /opt/sonar-#{node['sonar']['version']}.zip -d /opt/" do
-  not_if {File.directory?("/opt/sonar-#{node['sonar']['version']}/")}
+execute "unzip #{node['sonar']['dir']}/sonar-#{node['sonar']['version']}.zip -d #{node['sonar']['dir']}/" do
+  not_if {File.directory?("#{node['sonar']['dir']}/sonar-#{node['sonar']['version']}/")}
 end
 
-link "/opt/sonar" do
-  to "/opt/sonar-#{node['sonar']['version']}"
+link "#{node['sonar']['dir']}/sonar" do
+  to "#{node['sonar']['dir']}/sonar-#{node['sonar']['version']}"
 end
 
 service "sonar" do
-  stop_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
-  start_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
-  status_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh status"
-  restart_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh restart"
+  stop_command "sh #{node['sonar']['dir']}/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
+  start_command "sh #{node['sonar']['dir']}/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
+  status_command "sh #{node['sonar']['dir']}/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh status"
+  restart_command "sh #{node['sonar']['dir']}/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh restart"
   action :start
 end
 
 template "sonar.properties" do
-  path "/opt/sonar/conf/sonar.properties"
+  path "#{node['sonar']['dir']}/sonar/conf/sonar.properties"
   source "sonar.properties.erb"
   owner "root"
   group "root"
@@ -54,7 +54,7 @@ template "sonar.properties" do
 end
 
 template "wrapper.conf" do
-  path "/opt/sonar/conf/wrapper.conf"
+  path "#{node['sonar']['dir']}/sonar/conf/wrapper.conf"
   source "wrapper.conf.erb"
   owner "root"
   group "root"

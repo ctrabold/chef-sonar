@@ -20,7 +20,7 @@ end
 attribute "sonar/dir",
   :display_name => "Sonar directory",
   :description => "Path to sonar",
-  :default => "/opt/sonar"
+  :default => "/opt"
 
 attribute "sonar/version",
   :display_name => "Sonar version",

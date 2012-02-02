@@ -1,5 +1,5 @@
 # General settings
-default['sonar']['dir']       = "/opt/sonar"
+default['sonar']['dir']       = "/opt"
 default['sonar']['version']   = "2.11"
 default['sonar']['checksum']  = "9d05e25ca79c33d673004444d89c8770"
 default['sonar']['os_kernel'] = "linux-x86-32"
