@@ -19,9 +19,9 @@
 
 # Database settings
 # @see conf/sonar.properties for examples for different databases
-override['sonar']['jdbc_url']             = "jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8"
-override['sonar']['jdbc_driverClassName'] = "com.mysql.jdbc.Driver"
-override['sonar']['jdbc_validationQuery'] = "select 1"
+node.default['sonar']['jdbc_url']             = "jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8"
+node.default['sonar']['jdbc_driverClassName'] = "com.mysql.jdbc.Driver"
+node.default['sonar']['jdbc_validationQuery'] = "select 1"
 
-include "default"
-include "database_mysql"
+include_recipe "sonar::default"
+include_recipe "sonar::database_mysql"

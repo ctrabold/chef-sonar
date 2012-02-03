@@ -36,6 +36,14 @@ link "/opt/sonar" do
   to "/opt/sonar-#{node['sonar']['version']}"
 end
 
+file "/etc/init.d/sonar" do
+    path "/opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh"
+    owner "root"
+    group "root"
+    mode "0755"
+    action :create
+end
+
 service "sonar" do
   stop_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
   start_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
