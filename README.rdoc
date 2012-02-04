@@ -5,8 +5,9 @@ This cookbook basically translates the install instructions from http://docs.cod
 = REQUIREMENTS:
 
 * java + jdk
-* A database cookbook like 'mysql' if you like to run sonar in production.
-The built in derby database is not recommended for production.
+* A database cookbook like 'mysql' if you like to run sonar in production. The built in derby database is not recommended for production. However, make sure 'bind-address' value is correctly configured in the MySQL side. Recommended configuration to work with this Sonar recipe:
+
+    node['mysql']['bind_address'] = 'localhost'
 
 = ATTRIBUTES:
 
