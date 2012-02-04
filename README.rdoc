@@ -18,9 +18,36 @@ See attributes/default.rb for details.
 The cookbook installs sonar with derby database (default).
 Inlcude a proxy_* recipe to your run_list to access sonar over a proxy server.
 
+A possible role definition, given as example, to put into roles/metrics-server.rb :
+
+    name "metrics-server"
+
+    description "Roles for a Metrics server"
+
+    # List of recipes and roles to apply. Requires Chef 0.8, earlier versions use 'recipes()'.
+    run_list "recipe[mysql::server]",
+             "recipe[apache2]",
+             "recipe[sonar]",
+             "recipe[sonar::database_mysql]",
+             "recipe[sonar::proxy_apache]"
+
+    # Attributes applied no matter what the node has set already.
+    override_attributes 'sonar' => {
+        'web_domain' => 'metrics.example.com',
+        'dir' => '/usr/share',
+        'version' => '2.13.1',
+        'os_kernel' => 'linux-x86-64',
+        'jdbc_username' => "sonar",
+        'jdbc_password' => "sonar",
+        'jdbc_url' => "jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8",
+        'jdbc_driverClassName' => "com.mysql.jdbc.Driver",
+        'jdbc_validationQuery' => "select 1"
+    }, 'mysql' => {
+        'bind_address' => 'localhost'
+    }
+
 = Todos
 
-* Implement 'dir' attribute to make installation path more flexible
 * Implement different Database backends like MySql
 * Implement plugin recipes eg. http://docs.codehaus.org/display/SONAR/PHP+Plugin
   Download jars to plugin folder, restart Sonar
