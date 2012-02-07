@@ -30,3 +30,6 @@ default['sonar']['java_maxmemory']         = "512"
 default['sonar']['java_command']           = "java"
 default['sonar']['logfile_maxsize']        = "0"
 default['sonar']['syslog_loglevel']        = "NONE"
+
+# Sonar Plugin settings
+default['sonar']['plugin_php']['url'] = 'http://repository.codehaus.org/org/codehaus/sonar-plugins/php/sonar-php-plugin/1.0/sonar-php-plugin-1.0.jar'
