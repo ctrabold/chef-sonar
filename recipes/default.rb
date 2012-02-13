@@ -36,12 +36,13 @@ link "/opt/sonar" do
   to "/opt/sonar-#{node['sonar']['version']}"
 end
 
+link "/etc/init.d/sonar" do
+  to "/opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh"
+end
+
 service "sonar" do
-  stop_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
-  start_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
-  status_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh status"
-  restart_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh restart"
-  action :start
+  supports :status => true, :restart => true
+  action :enable
 end
 
 template "sonar.properties" do
