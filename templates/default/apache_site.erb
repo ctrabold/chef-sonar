@@ -1,10 +1,20 @@
-ProxyRequests Off
-ProxyPreserveHost On
 <VirtualHost *:80>
   ServerName <%= node['sonar']['web_domain'] %>
   ServerAdmin admin@<%= node['sonar']['web_domain'] %>
-  ProxyPass / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
-  ProxyPassReverse / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
-  ErrorLog logs/<%= node['sonar']['web_domain'] %>/sonar/error.log
-  CustomLog logs/<%= node['sonar']['web_domain'] %>/sonar/access.log common
+  ProxyRequests Off
+
+  # Local reverse proxy authorization override
+  # Most unix distribution deny proxy by default
+  # (ie /etc/apache2/mods-enabled/proxy.conf in Ubuntu)
+  <Proxy http://<%= node['sonar']['web_domain'] %>:9000/*>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+
+  ProxyPreserveHost On
+  ProxyPass 		/ http://<%= node['sonar']['web_domain'] %>:<%= node['sonar']['web_port'] %>/
+  ProxyPassReverse 	/ http://<%= node['sonar']['web_domain'] %>:<%= node['sonar']['web_port'] %>/
+
+  ErrorLog /var/log/apache2/sonar.error.log
+  CustomLog /var/log/apache2/sonar.access.log common
 </VirtualHost>

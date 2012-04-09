@@ -1,7 +1,7 @@
 # General settings
-default['sonar']['dir']       = "/opt/sonar"
-default['sonar']['version']   = "2.11"
-default['sonar']['checksum']  = "9d05e25ca79c33d673004444d89c8770"
+default['sonar']['dir']       = "/opt"
+default['sonar']['version']   = "2.13.1"
+default['sonar']['checksum']  = "37e0502e07e197b8e3a382c64fac8e1d"
 default['sonar']['os_kernel'] = "linux-x86-32"
 default['sonar']['mirror']    = "http://dist.sonar.codehaus.org"
 
@@ -30,3 +30,6 @@ default['sonar']['java_maxmemory']         = "512"
 default['sonar']['java_command']           = "java"
 default['sonar']['logfile_maxsize']        = "0"
 default['sonar']['syslog_loglevel']        = "NONE"
+
+# Sonar Plugin settings
+default['sonar']['plugin_php']['url'] = 'http://repository.codehaus.org/org/codehaus/sonar-plugins/php/sonar-php-plugin/1.0/sonar-php-plugin-1.0.jar'
