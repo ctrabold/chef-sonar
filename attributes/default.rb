@@ -13,6 +13,7 @@ default['sonar']['web_host']               = "0.0.0.0"
 default['sonar']['web_port']               = "9000"
 default['sonar']['web_domain']             = "sonar.example.com"
 default['sonar']['web_context']            = "/"
+default['sonar']['web_template']           = "default"
 
 # Database settings
 # @see conf/sonar.properties for examples for different databases
