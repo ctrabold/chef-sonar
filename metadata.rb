@@ -2,7 +2,7 @@ maintainer       "Christian Trabold"
 maintainer_email "info@christian-trabold.de"
 license          "Apache 2.0"
 description      "Installs/Configures sonar"
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.rdoc'))
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.0.3"
 recipe           "sonar", "Includes the recipe to download and configure a sonar server"
 recipe           "sonar::database_mysql", "Includes the recipe to install MySql-Server and create a database for sonar"
