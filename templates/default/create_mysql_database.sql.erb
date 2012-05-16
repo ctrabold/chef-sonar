@@ -7,5 +7,5 @@
 
 CREATE DATABASE IF NOT EXISTS sonar CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-GRANT ALL ON sonar.* TO 'sonar'@'localhost' IDENTIFIED BY 'sonar';
+GRANT ALL ON sonar.* TO '<%= node['sonar']['jdbc_username'] %>'@'localhost' IDENTIFIED BY '<%= node['sonar']['jdbc_password'] %>';
 FLUSH PRIVILEGES;
