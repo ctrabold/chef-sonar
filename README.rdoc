@@ -23,3 +23,11 @@ Inlcude a proxy_* recipe to your run_list to access sonar over a proxy server.
 * Implement different Database backends like MySql
 * Implement plugin recipes eg. http://docs.codehaus.org/display/SONAR/PHP+Plugin
   Download jars to plugin folder, restart Sonar
+* Create database with mysql LWRP
+	mysql_database "sonar" do
+	  host "localhost"
+	  username "root"
+	  password node[:mysql][:server_root_password]
+	  database "sonar"
+	  action :create_db
+	end
