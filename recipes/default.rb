@@ -50,6 +50,9 @@ template "sonar.properties" do
   owner "root"
   group "root"
   mode 0644
+  variables(
+    :options => node['sonar']['options']
+  )
   notifies :restart, resources(:service => "sonar")
 end
 
