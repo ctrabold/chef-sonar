@@ -32,3 +32,4 @@ default['sonar']['java_maxpermsize']       = "128m"
 default['sonar']['java_command']           = "java"
 default['sonar']['logfile_maxsize']        = "0"
 default['sonar']['syslog_loglevel']        = "NONE"
+default['sonar']['enable_mod_proxy_ajp']   = false
