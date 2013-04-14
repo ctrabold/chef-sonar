@@ -1,10 +1,12 @@
 ProxyRequests Off
 ProxyPreserveHost On
 <VirtualHost *:80>
-  ServerName <%= node['sonar']['web_domain'] %>
-  ServerAdmin admin@<%= node['sonar']['web_domain'] %>
+  ServerName <%= @params[:server_name] %>
+  ServerAdmin <%= node[:apache][:contact] %>
   ProxyPass / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
   ProxyPassReverse / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
-  ErrorLog <%= node['apache']['log_dir'] %>/<%= node['sonar']['web_domain'] %>-error.log
-  CustomLog <%= node['apache']['log_dir'] %>/<%= node['sonar']['web_domain'] %>-access.log common
+
+  LogLevel warn
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
+  ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
 </VirtualHost>
