@@ -136,3 +136,11 @@ sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
 # proxy authentication. The 2 following properties are used for HTTP and SOCKS proxies.
 #http.proxyUser=
 #http.proxyPassword=
+
+# More options from Chef
+
+<% if @options -%>
+<%   @options.sort.map do | option, value | -%>
+<%= option %>:	<%= value %>
+<%   end -%>
+<% end -%>
