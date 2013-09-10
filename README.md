@@ -17,6 +17,25 @@ See `attributes/default.rb` for details.
 The cookbook installs sonar with derby database (default).
 Inlcude a `proxy_*` recipe to your `run_list` to access sonar over a proxy server.
 
+# RUNNING TESTS:
+
+You'll need the following installed:
+* VirtualBox - https://www.virtualbox.org (tested with 4.2.16)
+* Vagrant - http://www.vagrantup.com (tested with 1.2.4)
+* The following gems:
+  * `gem install test-kitchen --pre` (tested with 1.0.0.beta.2)
+  * `gem install berkshelf` (tested with 2.0.10)
+  * `gem install kitchen-vagrant` (tested with 0.11.0)
+* The following Vagrant plugins:
+  * `vagrant plugin install vagrant-berkshelf` (tested with 1.3.3)
+  * `vagrant plugin install vagrant-omnibus` (tested with 1.1.0)
+  * `vagrant plugin install vagrant-vbguest` (tested with 0.8.0)
+
+Running the tests:
+* `kitchen list` will list test suites on various platforms.
+* `kitchen test` will run ALL the tests.
+* `kitchen test TEST_NAME` (e.g. `kitchen test default-centos-64`) will run only that given test.
+
 # Todos
 
 * Implement `dir` attribute to make installation path more flexible

@@ -1,20 +1,25 @@
-maintainer       "Christian Trabold"
-maintainer_email "info@christian-trabold.de"
-license          "Apache 2.0"
-description      "Installs/Configures sonar"
+name             'sonar'
+maintainer       'Christian Trabold'
+maintainer_email 'info@christian-trabold.de'
+license          'Apache 2.0'
+description      'Installs/Configures sonar'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.0.4"
+version          '0.1.0'
 recipe           "sonar", "Includes the recipe to download and configure a sonar server"
 recipe           "sonar::database_mysql", "Includes the recipe to install MySql-Server and create a database for sonar"
 recipe           "sonar::proxy_apache", "Includes the recipe to install Apache-Webserver and proxy modules to access sonar. Creates a host for sonar."
 recipe           "sonar::proxy_nginx", "Includes the recipe to install Nginx-Webserver and configures proxy to access sonar. Creates a host for sonar."
 
-%w{ debian ubuntu }.each do |os|
+%w{ debian ubuntu centos }.each do |os|
   supports os
 end
 
 %w{ java }.each do |cb|
   depends cb
+end
+
+%w{ apt openssl database mysql apache2 nginx }.each do |cb|
+  recommends cb
 end
 
 attribute "sonar/dir",

@@ -1,0 +1,66 @@
+---
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: true
+
+platforms:
+- name: ubuntu-12.04
+  driver_config:
+    box: opscode-ubuntu-12.04
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
+- name: ubuntu-10.04
+  driver_config:
+    box: opscode-ubuntu-10.04
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-10.04_provisionerless.box
+- name: centos-6.4
+  driver_config:
+    box: opscode-centos-6.4
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-6.4_provisionerless.box
+- name: centos-5.9
+  driver_config:
+    box: opscode-centos-5.9
+    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-5.9_provisionerless.box
+
+suites:
+- name: default
+  run_list:
+  - recipe[minitest-handler]
+  - recipe[sonar_test]
+  attributes:
+    sonar:
+      os_kernel: "linux-x86-64"
+- name: database_mysql
+  run_list:
+  - recipe[minitest-handler]
+  - recipe[sonar_test]
+  - recipe[sonar_test::database_mysql]
+  attributes:
+    sonar:
+      os_kernel: "linux-x86-64"
+      jdbc_url: "jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8"
+      jdbc_driverClassName: "com.mysql.jdbc.Driver"
+      jdbc_validationQuery: "select 1"
+      mysql:
+        access_ips:
+        - "localhost"
+        - "%"
+    mysql:
+      server_debian_password: "test"
+      server_root_password: "test"
+      server_repl_password: "test"
+- name: proxy_nginx
+  run_list:
+  - recipe[minitest-handler]
+  - recipe[sonar_test]
+  - recipe[sonar_test::proxy_nginx]
+  attributes:
+    sonar:
+      os_kernel: "linux-x86-64"
+- name: proxy_apache
+  run_list:
+  - recipe[minitest-handler]
+  - recipe[sonar_test]
+  - recipe[sonar_test::proxy_apache]
+  attributes:
+    sonar:
+      os_kernel: "linux-x86-64"

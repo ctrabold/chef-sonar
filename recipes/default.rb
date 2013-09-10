@@ -17,35 +17,45 @@
 # limitations under the License.
 #
 
+case node[:platform]
+when "debian","ubuntu"
+  # update apt data to allow installation of java
+  include_recipe "apt"
+end
+
 include_recipe "java"
 
 package "unzip"
 
-remote_file "/opt/sonar-#{node['sonar']['version']}.zip" do
+sonar_install_path = "/opt/sonar-#{node['sonar']['version']}"
+zip_file_path = "#{sonar_install_path}.zip"
+
+remote_file zip_file_path do
   source "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
   mode "0644"
   checksum "#{node['sonar']['checksum']}"
-  not_if { ::File.exists?("/opt/sonar-#{node['sonar']['version']}.zip") }
+  not_if { ::File.exists?(zip_file_path) }
 end
 
-execute "unzip /opt/sonar-#{node['sonar']['version']}.zip -d /opt/" do
-  not_if { ::File.directory?("/opt/sonar-#{node['sonar']['version']}/") }
+execute "unzip #{zip_file_path} -d /opt/" do
+  not_if { ::File.directory?("#{sonar_install_path}/") }
 end
 
 link "/opt/sonar" do
-  to "/opt/sonar-#{node['sonar']['version']}"
+  to sonar_install_path
+end
+
+link "/etc/init.d/sonar" do
+  to "#{node['sonar']['dir']}/bin/#{node['sonar']['os_kernel']}/sonar.sh"
 end
 
 service "sonar" do
-  stop_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
-  start_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
-  status_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh status"
-  restart_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh restart"
-  action :start
+  supports :start => true, :stop => true, :status => true, :restart => true
+  action :enable
 end
 
 template "sonar.properties" do
-  path "/opt/sonar/conf/sonar.properties"
+  path "#{node['sonar']['dir']}/conf/sonar.properties"
   source "sonar.properties.erb"
   owner "root"
   group "root"
@@ -57,10 +67,12 @@ template "sonar.properties" do
 end
 
 template "wrapper.conf" do
-  path "/opt/sonar/conf/wrapper.conf"
+  path "#{node['sonar']['dir']}/conf/wrapper.conf"
   source "wrapper.conf.erb"
   owner "root"
   group "root"
   mode 0644
   notifies :restart, resources(:service => "sonar")
 end
+
+# wait here until sonar is up and running (listening on the given host/port)

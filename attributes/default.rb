@@ -1,3 +1,8 @@
+#
+# Cookbook Name:: sonar
+# Attributes:: default
+#
+
 # General settings
 default['sonar']['dir']                    = "/opt/sonar"
 default['sonar']['version']                = "2.11"
@@ -22,6 +27,13 @@ default['sonar']['jdbc_password']          = "sonar"
 default['sonar']['jdbc_url']               = "jdbc:derby://localhost:1527/sonar;create=true"
 default['sonar']['jdbc_driverClassName']   = "org.apache.derby.jdbc.ClientDriver"
 default['sonar']['jdbc_validationQuery']   = "values(1)"
+
+# Allow direct access to the Sonar database via these IPs. Default only allows access
+# from localhost. If you use things that write directly to the Sonar DB from remote
+# locations (e.g. the sonar-maven-plugin), you may want to allow additional specific
+# IPs (or '%', which allows open remote access). Note that node['mysql']['bind_address']
+# also controls who can actually connect to mysql.
+default['sonar']['mysql']['access_ips'] = [ 'localhost' ]
 
 # Wrapper settings eg. for performance improvements
 # @see http://docs.codehaus.org/display/SONAR/Performances

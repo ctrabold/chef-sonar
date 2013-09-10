@@ -1,17 +1,31 @@
+#
+# Cookbook Name:: sonar
+# Recipe:: database_mysql
+#
+# Adds mysql database server for use by Sonar.
+#
+
 include_recipe "mysql::server"
+include_recipe "database::mysql"
 
-# Setup sonar user
-grants_path = "/opt/sonar/extras/database/mysql/create_database.sql"
+mysql_connection_info = {
+  :host => 'localhost',
+  :username => 'root',
+  :password => node['mysql']['server_root_password']
+}
 
-template grants_path do
-  source "create_mysql_database.sql.erb"
-  owner "root"
-  group "root"
-  mode "0600"
+mysql_database 'sonar' do
+  connection ({:host => "localhost", :username => 'root', :password => node['mysql']['server_root_password']})
   action :create
-  notifies :restart, resources(:service => "sonar")
 end
 
-execute "mysql-install-application-privileges" do
-  command "/usr/bin/mysql -u root #{node[:mysql][:server_root_password].empty? ? '' : '-p' }#{node[:mysql][:server_root_password]} < #{grants_path}"
+node['sonar']['mysql']['access_ips'].each do |ip|
+  mysql_database_user node['sonar']['jdbc_username'] do
+    connection mysql_connection_info
+    password node['sonar']['jdbc_password']
+    database_name 'sonar'
+    host ip
+    privileges [ :all ]
+    action :grant
+  end
 end
