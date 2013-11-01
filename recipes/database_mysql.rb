@@ -15,7 +15,7 @@ mysql_connection_info = {
 }
 
 mysql_database 'sonar' do
-  connection ({:host => "localhost", :username => 'root', :password => node['mysql']['server_root_password']})
+  connection mysql_connection_info
   action :create
 end
 
