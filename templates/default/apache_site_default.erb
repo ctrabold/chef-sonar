@@ -3,8 +3,14 @@ ProxyPreserveHost On
 <VirtualHost *:80>
   ServerName <%= node['sonar']['web_domain'] %>
   ServerAdmin admin@<%= node['sonar']['web_domain'] %>
+
+  <Proxy *>
+    Order Allow,Deny
+    Allow from all
+  </Proxy>
+
   ProxyPass / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
   ProxyPassReverse / http://<%= node['sonar']['web_host'] %>:<%= node['sonar']['web_port'] %>/
-  ErrorLog logs/<%= node['sonar']['web_domain'] %>/sonar/error.log
-  CustomLog logs/<%= node['sonar']['web_domain'] %>/sonar/access.log common
+  ErrorLog <%= node['apache']['log_dir'] %>/<%= node['sonar']['web_domain'] %>-error.log
+  CustomLog <%= node['apache']['log_dir'] %>/<%= node['sonar']['web_domain'] %>-access.log common
 </VirtualHost>

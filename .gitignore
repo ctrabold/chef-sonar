@@ -1,2 +1,4 @@
 .project
 .buildpath
+.kitchen
+.vagrant

@@ -1,0 +1,61 @@
+{
+  "sources": {
+    "sonar": {
+      "path": "."
+    },
+    "minitest-handler": {
+      "locked_version": "0.2.1"
+    },
+    "sonar_test": {
+      "path": "./test/cookbooks/sonar_test"
+    },
+    "apt": {
+      "locked_version": "2.1.1"
+    },
+    "openssl": {
+      "locked_version": "1.0.2"
+    },
+    "database": {
+      "locked_version": "1.4.0"
+    },
+    "mysql": {
+      "locked_version": "3.0.2"
+    },
+    "build-essential": {
+      "locked_version": "1.4.2"
+    },
+    "postgresql": {
+      "locked_version": "3.0.4"
+    },
+    "aws": {
+      "locked_version": "0.101.4"
+    },
+    "xfs": {
+      "locked_version": "1.1.0"
+    },
+    "apache2": {
+      "locked_version": "1.7.0"
+    },
+    "nginx": {
+      "locked_version": "1.7.0"
+    },
+    "yum": {
+      "locked_version": "2.3.0"
+    },
+    "runit": {
+      "locked_version": "1.1.6"
+    },
+    "ohai": {
+      "locked_version": "1.1.10"
+    },
+    "java": {
+      "locked_version": "1.12.0"
+    },
+    "windows": {
+      "locked_version": "1.10.0"
+    },
+    "chef_handler": {
+      "locked_version": "1.1.4"
+    }
+  }
+}
