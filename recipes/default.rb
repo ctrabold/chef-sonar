@@ -3,6 +3,7 @@
 # Recipe:: default
 #
 # Copyright 2011, Christian Trabold
+# Copyright 2014, Ilja Bobkevic
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,29 +20,15 @@
 
 include_recipe "java"
 
-package "unzip"
-
-remote_file "/opt/sonar-#{node['sonar']['version']}.zip" do
-  source "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
-  mode "0644"
-  checksum "#{node['sonar']['checksum']}"
-  not_if { ::File.exists?("/opt/sonar-#{node['sonar']['version']}.zip") }
+if node['sonar']['install_package']
+  package 'sonar'
+else
+  include_recipe 'sonar::_source'
 end
 
-execute "unzip /opt/sonar-#{node['sonar']['version']}.zip -d /opt/" do
-  not_if { ::File.directory?("/opt/sonar-#{node['sonar']['version']}/") }
-end
-
-link "/opt/sonar" do
-  to "/opt/sonar-#{node['sonar']['version']}"
-end
-
-service "sonar" do
-  stop_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
-  start_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh start"
-  status_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh status"
-  restart_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh restart"
-  action :start
+service 'sonar' do
+  supports :status => true, :restart => true
+  action [ :enable, :start ]
 end
 
 template "sonar.properties" do
@@ -49,7 +36,7 @@ template "sonar.properties" do
   source "sonar.properties.erb"
   owner "root"
   group "root"
-  mode 0644
+  mode 0444
   variables(
     :options => node['sonar']['options']
   )
@@ -61,6 +48,11 @@ template "wrapper.conf" do
   source "wrapper.conf.erb"
   owner "root"
   group "root"
-  mode 0644
+  mode 0444
   notifies :restart, resources(:service => "sonar")
+end
+
+execute 'symlink-sonar-logs-directory' do
+  command "ln -s #{File.join(node['sonar']['dir'], 'logs')} /var/log/sonar"
+  not_if { File.exists?('/var/log/sonar') }
 end

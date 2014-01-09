@@ -1,10 +1,15 @@
 # Java Additional Parameters
 wrapper.java.additional.1=-Djava.awt.headless=true
 wrapper.java.additional.2=-XX:MaxPermSize=<%= node['sonar']['java_maxpermsize'] %>
+wrapper.java.additional.3=-XX:+HeapDumpOnOutOfMemoryError
+wrapper.java.additional.4=-Dfile.encoding=UTF-8
+wrapper.java.additional.5=-Djruby.management.enabled=false
 
 # RECOMMENDED : uncomment if Java Virtual Machine is a JDK but not a JRE. To know which JVM you use, execute
 # 'java -version'. JDK displays 'Server VM'.
-wrapper.java.additional.3=<%= node['sonar']['java_additional'] %>
+<%- if node['sonar']['java_additional'] -%>
+wrapper.java.additional.6=<%= node['sonar']['java_additional'] %>
+<%- end -%>
 
 # Initial Java Heap Size (in MB)
 wrapper.java.initmemory=<%= node['sonar']['java_initmemory'] %>
@@ -29,8 +34,8 @@ wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp
 # Java Classpath (include wrapper.jar)  Add class path elements as
 #  needed starting from 1
 wrapper.java.classpath.1=../../lib/*.jar
-wrapper.java.classpath.2=../../
-wrapper.java.classpath.3=../../extensions/jdbc-driver/derby/*.jar
+wrapper.java.classpath.2=../../conf
+wrapper.java.classpath.3=../../extensions/jdbc-driver/h2/*.jar
 wrapper.java.classpath.4=../../extensions/jdbc-driver/mysql/*.jar
 wrapper.java.classpath.5=../../extensions/jdbc-driver/oracle/*.jar
 wrapper.java.classpath.6=../../extensions/jdbc-driver/postgresql/*.jar
@@ -44,21 +49,16 @@ wrapper.app.parameter.1=org.sonar.application.StartServer
 
 #********************************************************************
 # Profiling and debbuging - for development only
-# If wrapper.java.additional.3=-server is not commented, parameter ids should start from 4 instead of 3.
+# If wrapper.java.additional.6=-server is not commented, parameter ids should start from 7 instead of 6.
 #********************************************************************
 # Java remote debugging
-#wrapper.java.additional.3=-agentlib:jdwp=transport=dt_socket,server=y,address=8000
-
-# JProfiler 5
-#wrapper.java.additional.3=-Xint
-#wrapper.java.additional.4=-agentlib:jprofilerti=port=8849
-#wrapper.java.additional.5=-Xbootclasspath/a:/Applications/jprofiler5/bin/agent.jar
+#wrapper.java.additional.6=-agentlib:jdwp=transport=dt_socket,server=y,address=8000
 
 # JMX remote monitoring on Sun JVM (warning, security is disabled)
-#wrapper.java.additional.3=-Dcom.sun.management.jmxremote
-#wrapper.java.additional.4=-Dcom.sun.management.jmxremote.port=9005
-#wrapper.java.additional.5=-Dcom.sun.management.jmxremote.authenticate=false
-#wrapper.java.additional.6=-Dcom.sun.management.jmxremote.ssl=false
+#wrapper.java.additional.6=-Dcom.sun.management.jmxremote
+#wrapper.java.additional.7=-Dcom.sun.management.jmxremote.port=9005
+#wrapper.java.additional.8=-Dcom.sun.management.jmxremote.authenticate=false
+#wrapper.java.additional.9=-Dcom.sun.management.jmxremote.ssl=false
 
 #********************************************************************
 # Wrapper Logging Properties
@@ -67,13 +67,13 @@ wrapper.app.parameter.1=org.sonar.application.StartServer
 wrapper.console.format=PM
 
 # Log Level for console output.  (See docs for log levels)
-wrapper.console.loglevel=NONE
+wrapper.console.loglevel=INFO
 
 # Log file to use for wrapper output logging.
 wrapper.logfile=../../logs/sonar.log
 
 # Format of output for the log file.  (See docs for formats)
-wrapper.logfile.format=LPTM
+wrapper.logfile.format=M
 
 # Log Level for log file output.  (See docs for log levels)
 wrapper.logfile.loglevel=INFO
@@ -82,7 +82,9 @@ wrapper.logfile.loglevel=INFO
 #  the log is rolled. Size is specified in bytes.  The default value
 #  of 0, disables log rolling.  May abbreviate with the 'k' (kb) or
 #  'm' (mb) suffix.  For example: 10m = 10 megabytes.
+<%- if node['sonar']['logfile_maxsize'] -%>
 wrapper.logfile.maxsize=<%= node['sonar']['logfile_maxsize'] %>
+<%- end -%>
 
 # Maximum number of rolled log files which will be allowed before old
 #  files are deleted.  The default value of 0 implies no limit.
@@ -96,6 +98,9 @@ wrapper.syslog.loglevel=<%= node['sonar']['syslog_loglevel'] %>
 #********************************************************************
 # Title to use when running as a console
 wrapper.console.title=Sonar
+
+# Disallow start of multiple instances of an application at the same time on Windows
+wrapper.single_invocation=true
 
 #********************************************************************
 # Wrapper Windows NT/2000/XP Service Properties
