@@ -56,3 +56,8 @@ execute 'symlink-sonar-logs-directory' do
   command "ln -s #{File.join(node['sonar']['dir'], 'logs')} /var/log/sonar"
   not_if { File.exists?('/var/log/sonar') }
 end
+
+execute 'symlink-sonar-conf-directory' do
+  command "ln -s #{File.join(node['sonar']['dir'], 'conf')} /etc/sonar"
+  not_if { File.exists?('/etc/sonar') }
+end
