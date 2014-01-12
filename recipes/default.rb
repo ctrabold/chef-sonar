@@ -20,7 +20,8 @@
 include_recipe "java"
 
 ark "sonar" do
-  path "/usr/local/sonar"
+  prefix_home "/opt"
+  prefix_root "/opt"
   version node['sonar']['version']
   url "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
   action :install
