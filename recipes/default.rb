@@ -32,7 +32,7 @@ service 'sonar' do
 end
 
 template "sonar.properties" do
-  path "/opt/sonar/conf/sonar.properties"
+  path File.join(node['sonar']['conf_dir'], 'sonar.properties')
   source "sonar.properties.erb"
   owner "root"
   group "root"
@@ -44,7 +44,7 @@ template "sonar.properties" do
 end
 
 template "wrapper.conf" do
-  path "/opt/sonar/conf/wrapper.conf"
+  path File.join(node['sonar']['conf_dir'], 'wrapper.conf')
   source "wrapper.conf.erb"
   owner "root"
   group "root"
@@ -53,11 +53,11 @@ template "wrapper.conf" do
 end
 
 execute 'symlink-sonar-logs-directory' do
-  command "ln -s #{File.join(node['sonar']['dir'], 'logs')} /var/log/sonar"
+  command "ln -s #{File.join(node['sonar']['log_dir'])} /var/log/sonar"
   not_if { File.exists?('/var/log/sonar') }
 end
 
 execute 'symlink-sonar-conf-directory' do
-  command "ln -s #{File.join(node['sonar']['dir'], 'conf')} /etc/sonar"
+  command "ln -s #{File.join(node['sonar']['conf_dir'])} /etc/sonar"
   not_if { File.exists?('/etc/sonar') }
 end

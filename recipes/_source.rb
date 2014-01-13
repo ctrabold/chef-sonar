@@ -20,22 +20,25 @@
 
 package "unzip"
 
-remote_file "/opt/sonar-#{node['sonar']['version']}.zip" do
-  source "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
+zip_file_path = File.join(node['sonar']['install_dir'], node['sonar']['zip_file'])
+sonar_dir     = File.join(node['sonar']['install_dir'], "#{node['sonar']['name']}-#{node['sonar']['version']}")
+
+remote_file zip_file_path do
+  source "#{node['sonar']['mirror']}/#{node['sonar']['zip_file']}"
   mode "0644"
   checksum "#{node['sonar']['checksum']}"
-  not_if { ::File.exists?("/opt/sonar-#{node['sonar']['version']}.zip") }
+  not_if { ::File.exists?(zip_file_path) }
 end
 
-execute "unzip /opt/sonar-#{node['sonar']['version']}.zip -d /opt/" do
-  not_if { ::File.directory?("/opt/sonar-#{node['sonar']['version']}/") }
+execute "unzip #{zip_file_path} -d #{node['sonar']['install_dir']}" do
+  not_if { ::File.directory?(sonar_dir) }
 end
 
-link node['sonar']['dir'] do
-  to "/opt/sonar-#{node['sonar']['version']}"
+link node['sonar']['home'] do
+  to sonar_dir
 end
 
-link File.join(node['sonar']['dir'], 'bin', node['sonar']['os_kernel'], 'sonar.sh') do
+link File.join(node['sonar']['bin_dir'], 'sonar.sh') do
   to '/usr/bin/sonar'
 end
 

@@ -1,8 +1,14 @@
 # General settings
-default['sonar']['dir']                    = "/opt/sonar"
+default['sonar']['name']                   = "sonarqube"
 default['sonar']['version']                = "4.0"
-default['sonar']['checksum']               = "01e036c265bac46105515eb8a753bc02208c9a22b198bc846acf2e752ea133e5"
 default['sonar']['os_kernel']              = "#{node['os']}-#{node['kernel']['machine'].gsub('_', '-')}"
+default['sonar']['install_dir']            = "/opt"
+default['sonar']['home']                   = File.join(node['sonar']['install_dir'], node['sonar']['name'])
+default['sonar']['conf_dir']               = File.join(node['sonar']['home'], 'conf')
+default['sonar']['log_dir']                = File.join(node['sonar']['home'], 'logs')
+default['sonar']['bin_dir']                = File.join(node['sonar']['home'], 'bin', node['sonar']['os_kernel'])
+default['sonar']['zip_file']               = "#{node['sonar']['name']}-#{node['sonar']['version']}.zip"
+default['sonar']['checksum']               = "01e036c265bac46105515eb8a753bc02208c9a22b198bc846acf2e752ea133e5"
 default['sonar']['mirror']                 = "http://dist.sonar.codehaus.org"
 default['sonar']['install_package']        = false
 
