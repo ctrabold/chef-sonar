@@ -24,7 +24,7 @@ template "sonar_server.conf" do
   source "nginx_site_#{node['sonar']['web_template']}.erb"
   owner "root"
   group "root"
-  mode 0644
+  mode 0444
 end
 
 nginx_site "sonar_server.conf" do

@@ -11,7 +11,7 @@ describe_recipe 'sonar::default' do
 
   describe "installs" do
     it "installs the files to the correct folder" do
-      directory(node['sonar']['dir']).must_exist
+      directory(node['sonar']['home']).must_exist
     end
 
 #    TODO ct 2012-06-27 How to check sonar process?
