@@ -80,11 +80,13 @@ def do_remove_plugin
     action :delete
     backup false
     notifies :restart, 'service[sonar]'
+    notifies :create, 'ruby_block[block_sonar_until_operational]'
   end
 
   directory plugin_dir_path do
     action :delete
     recursive true
     notifies :restart, 'service[sonar]'
+    notifies :create, 'ruby_block[block_sonar_until_operational]'
   end
 end

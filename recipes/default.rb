@@ -45,7 +45,8 @@ template "sonar.properties" do
   variables(
     :options => node['sonar']['options']
   )
-  notifies :restart, resources(:service => "sonar")
+  notifies :restart, 'service[sonar]', :immediately
+  notifies :create, 'ruby_block[block_sonar_until_operational]', :immediately
 end
 
 template "wrapper.conf" do
@@ -54,5 +55,29 @@ template "wrapper.conf" do
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, resources(:service => "sonar")
+  notifies :restart, 'service[sonar]', :immediately
+  notifies :create, 'ruby_block[block_sonar_until_operational]', :immediately
+end
+
+ruby_block 'block_sonar_until_operational' do
+  block do
+    Chef::Log.info "Waiting until Sonar is listening on port #{node['sonar']['web_port']}"
+    until SonarHelper.service_listening?(node['sonar']['web_port'])
+      sleep 1
+      Chef::Log.debug('.')
+    end
+
+    Chef::Log.info 'Waiting until the Sonar API is responding'
+    test_url = URI.parse("#{node['sonar']['web_port']}/api/server")
+    until SonarHelper.endpoint_responding?(test_url)
+      sleep 1
+      Chef::Log.debug('.')
+    end
+  end
+  action :nothing
+end
+
+log 'ensure_sonar_is_running' do
+  notifies :start, 'service[sonar]', :immediately
+  notifies :create, 'ruby_block[block_sonar_until_operational]', :immediately
 end
