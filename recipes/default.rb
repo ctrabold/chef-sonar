@@ -68,7 +68,7 @@ ruby_block 'block_sonar_until_operational' do
     end
 
     Chef::Log.info 'Waiting until the Sonar API is responding'
-    test_url = URI.parse("#{node['sonar']['web_port']}/api/server")
+    test_url = URI.parse("http://localhost:#{node['sonar']['web_port']}/api/server")
     until SonarHelper.endpoint_responding?(test_url)
       sleep 1
       Chef::Log.debug('.')
