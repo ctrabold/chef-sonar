@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+include_recipe "ark"
 include_recipe "java"
 
 ark "sonar" do
