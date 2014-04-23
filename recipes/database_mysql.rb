@@ -1,17 +1,33 @@
-include_recipe "mysql::server"
+include_recipe "database::mysql"
 
-# Setup sonar user
-grants_path = "/opt/sonar/extras/database/mysql/create_database.sql"
+mysql_connection_info = {
+  :host     => 'localhost',
+  :username => 'root',
+  :password => node['mysql']['server_root_password']
+}
 
-template grants_path do
-  source "create_mysql_database.sql.erb"
-  owner "root"
-  group "root"
-  mode "0600"
-  action :create
-  notifies :restart, resources(:service => "sonar")
+mysql_database "sonar" do
+  connection mysql_connection_info
+  collation "utf8_general_ci"
+  encoding "utf8"
 end
 
-execute "mysql-install-application-privileges" do
-  command "/usr/bin/mysql -u root #{node[:mysql][:server_root_password].empty? ? '' : '-p' }#{node[:mysql][:server_root_password]} < #{grants_path}"
+mysql_database_user "sonar" do
+  connection      mysql_connection_info
+  password        node['sonar']['jdbc_password']
+  action          :create
+  notifies        :grant, "mysql_database_user[sonar]"
+end
+
+mysql_database_user "sonar-grant" do
+  connection      mysql_connection_info
+  database_name   "sonar"
+  action          :nothing # should be notified with :grant
+  notifies        :query, "mysql_database[flush privileges]"
+end
+
+mysql_database 'flush privileges' do
+  connection mysql_connection_info
+  sql        'flush privileges'
+  action     :nothing # should be notified with #query
 end
