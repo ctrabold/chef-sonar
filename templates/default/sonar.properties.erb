@@ -41,6 +41,7 @@ sonar.web.context:                        <%= node['sonar']['web_context'] %>
 # Permissions to create tables and indexes must be granted to JDBC user.
 # The schema must be created first.
 sonar.jdbc.username:                       <%= node['sonar']['jdbc_username'] %>
+sonar.jdbc.user:                           <%= node['sonar']['jdbc_username'] %>
 sonar.jdbc.password:                       <%= node['sonar']['jdbc_password'] %>
 
 #----- Embedded database Derby
@@ -48,9 +49,9 @@ sonar.jdbc.password:                       <%= node['sonar']['jdbc_password'] %>
 # sonar server and the maven plugin must be executed on the same host.
   
 # Comment the following lines to deactivate the default embedded database.
-sonar.jdbc.url:                            <%= node['sonar']['jdbc_url'] %>
-sonar.jdbc.driverClassName:                <%= node['sonar']['jdbc_driverClassName'] %>
-sonar.jdbc.validationQuery:                <%= node['sonar']['jdbc_validationQuery'] %>
+#sonar.jdbc.url:                            jdbc:derby://localhost:1527/sonar;create=true
+#sonar.jdbc.driverClassName:                org.apache.derby.jdbc.ClientDriver
+#sonar.jdbc.validationQuery:                values(1)
 
 # directory containing Derby database files. By default it's the /data directory in the sonar installation.
 #sonar.embeddedDatabase.dataDir:
@@ -62,9 +63,10 @@ sonar.jdbc.validationQuery:                <%= node['sonar']['jdbc_validationQue
 
 #----- MySQL 5.x/6.x
 # Comment the embedded database and uncomment the following properties to use MySQL. The validation query is optional.
-#sonar.jdbc.url:                            jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8
-#sonar.jdbc.driverClassName:                com.mysql.jdbc.Driver
-#sonar.jdbc.validationQuery:                select 1
+sonar.jdbc.url:                            jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8
+#sonar.jdbc.url:                            jdbc:mysql://localhost:3306/sonar
+sonar.jdbc.driverClassName:                com.mysql.jdbc.Driver
+sonar.jdbc.validationQuery:                select 1
 
 
 #----- Oracle 10g/11g
@@ -137,10 +139,3 @@ sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
 #http.proxyUser=
 #http.proxyPassword=
 
-# More options from Chef
-
-<% if @options -%>
-<%   @options.sort.map do | option, value | -%>
-<%= option %>:	<%= value %>
-<%   end -%>
-<% end -%>
