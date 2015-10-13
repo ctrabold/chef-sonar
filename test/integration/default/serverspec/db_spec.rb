@@ -13,6 +13,6 @@ describe service('mysql') do
 	it { should be enabled }
 end
 
-describe command("mysql -u root -pac4success -h 127.0.0.1 --port 3306 -e 'use sonar'") do
+describe command("mysql -u root -pmyp4ssw0rd -h 127.0.0.1 --port 3306 -e 'use sonar'") do
   its(:stdout) { should eq 0 }
 end
