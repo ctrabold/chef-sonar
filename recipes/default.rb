@@ -17,24 +17,54 @@
 # limitations under the License.
 #
 
-include_recipe "java"
+include_recipe 'apt'
+include_recipe 'ark'
+include_recipe 'java'
+include_recipe "maven"
+include_recipe "chef-sonar::database_mysql"
+include_recipe 'runit::default'
 
 package "unzip"
 
 remote_file "/opt/sonar-#{node['sonar']['version']}.zip" do
-  source "#{node['sonar']['mirror']}/sonar-#{node['sonar']['version']}.zip"
+  #source "http://downloads.sonarsource.com/sonarqube/sonarqube-#{node['sonar']['version']}.zip"
+  source "https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-#{node['sonar']['version']}.zip"
   mode "0644"
-  checksum "#{node['sonar']['checksum']}"
-  not_if { ::File.exists?("/opt/sonar-#{node['sonar']['version']}.zip") }
+#  checksum "#{node['sonar']['checksum']}"
+  not_if {File.exists?("/opt/sonar-#{node['sonar']['version']}.zip")}
 end
 
 execute "unzip /opt/sonar-#{node['sonar']['version']}.zip -d /opt/" do
-  not_if { ::File.directory?("/opt/sonar-#{node['sonar']['version']}/") }
+  not_if {File.directory?("/opt/sonar-#{node['sonar']['version']}/")}
 end
 
 link "/opt/sonar" do
-  to "/opt/sonar-#{node['sonar']['version']}"
+  to "/opt/sonarqube-#{node['sonar']['version']}"
 end
+
+
+template "sonar.properties" do
+  path "/opt/sonar/conf/sonar.properties"
+  source "sonar.properties.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  # notifies :restart, resources(:service => "sonar")
+end
+
+cookbook_file '/etc/init.d/sonar-init' do
+  source 'sonar-init'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
+execute 'Transform_Sonar_Service_to_executable' do
+  command 'chmod +x /etc/init.d/sonar-init'
+  user 'root'
+  action :run
+end
+
 
 service "sonar" do
   stop_command "sh /opt/sonar/bin/#{node['sonar']['os_kernel']}/sonar.sh stop"
@@ -44,23 +74,6 @@ service "sonar" do
   action :start
 end
 
-template "sonar.properties" do
-  path "/opt/sonar/conf/sonar.properties"
-  source "sonar.properties.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  variables(
-    :options => node['sonar']['options']
-  )
-  notifies :restart, resources(:service => "sonar")
-end
+runit_service "bootsonar"
 
-template "wrapper.conf" do
-  path "/opt/sonar/conf/wrapper.conf"
-  source "wrapper.conf.erb"
-  owner "root"
-  group "root"
-  mode 0644
-  notifies :restart, resources(:service => "sonar")
-end
+include_recipe "chef-sonar::proxy_nginx"

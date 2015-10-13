@@ -1,0 +1,23 @@
+= DESCRIPTION:
+
+This cookbook basically translates the install instructions from http://docs.codehaus.org/display/SONAR/Install+Sonar#InstallSonar-Server into chef DSL.
+
+= REQUIREMENTS:
+
+* java + jdk
+* A database cookbook like 'mysql' if you like to run sonar in production.
+The built in derby database is not recommended for production.
+
+= ATTRIBUTES:
+
+See attributes/default.rb for details.
+
+= USAGE:
+
+The cookbook installs sonar with derby database (default).
+Inlcude a proxy_* recipe to your run_list to access sonar over a proxy server.
+
+= Todos
+
+* Implement different Database backends like MySql
+* Implement plugin recipes eg. http://docs.codehaus.org/display/SONAR/PHP+Plugin
